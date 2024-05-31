@@ -1,5 +1,8 @@
 package edu.cristian.eds.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.cristian.eds.models.interfaces.IConta;
 
 public abstract class Conta implements IConta{
@@ -13,11 +16,24 @@ public abstract class Conta implements IConta{
 	
 	protected Cliente cliente;
 	
+	protected List<Movimentacao> movimentacoes;
+	
 	public Conta(Cliente cliente) {
 		this.agencia = Conta.AGENCIA_PADRAO;
 		this.numero = SEQUENCIAL++;
 		this.cliente = cliente;
 		this.saldo = 0d;
+		this.movimentacoes = new ArrayList<Movimentacao>();
+		novaMovimentacao("CRIACAO",0d);
+		
+	}
+	
+	public List<Movimentacao> getMovimentacoes() {
+		return movimentacoes;
+	}
+
+	private void novaMovimentacao(String tipoMovimentacao, Double valor) {
+		movimentacoes.add(new Movimentacao(tipoMovimentacao, valor));
 	}
 
 	public Integer getAgencia() {
@@ -40,6 +56,7 @@ public abstract class Conta implements IConta{
 	public void sacar(double valor) {
 		if(valor <= this.saldo) {
 			saldo -= valor;
+			novaMovimentacao("SAQUE", valor);
 		}
 		
 	}
@@ -47,6 +64,7 @@ public abstract class Conta implements IConta{
 	@Override
 	public void depositar(double valor) {
 		this.saldo += valor;
+		novaMovimentacao("DEPOSITO", valor);
 		
 	}
 
@@ -56,6 +74,7 @@ public abstract class Conta implements IConta{
 			saldo -= valor;
 			contaDestino.depositar(valor);
 		}
+		novaMovimentacao("TRANSFERENCIA", valor);
 		
 	}
 

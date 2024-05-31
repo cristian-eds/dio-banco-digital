@@ -15,6 +15,10 @@ public class Main {
 		banco.adicionarNovaConta(conta2);
 		banco.adicionarNovaConta(conta);
 		
+		conta.depositar(1000d);
+		conta.transferir(250, conta2);
+		
+		System.out.println(conta.getMovimentacoes());
 		//conta.imprimirExtrato();
 		//conta2.imprimirExtrato();
 		
